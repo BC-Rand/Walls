@@ -5,15 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WallProj.Models
 {
-    public class User
+    public class Reply
     {
         [Key]
-        public int UserId { get; set; }
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Description { get; set; }
-        public int PermissionLevel { get; set; }
+        public int ReplyId { get; set; }
+        [ForeignKey("User")]
+        public int PosterUserId { get; set; }
+        public User Poster { get; set; }
+        public string Text { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

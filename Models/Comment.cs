@@ -5,18 +5,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WallProj.Models
 {
-    public class User
+    public class Comment
     {
         [Key]
-        public int UserId { get; set; }
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Description { get; set; }
-        public int PermissionLevel { get; set; }
+        public int CommentId { get; set; }
+        [ForeignKey("User")]
+        public int CommenterUserId { get; set; }
+        public User Commenter { get; set; }
+        public string Text { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
+        public List<Reply> Replies { get; set; }
+        public Comment()
+        {
+            Replies = new List<Reply>();
+        }
     }
 }
