@@ -1,0 +1,24 @@
+@model WallProj.Models.UserRegModel
+<h3>Register</h3>
+
+<form action="/register/process" method="POST">
+    <div>
+        <label asp-for="FirstName"></label><br>
+        <input asp-for="FirstName"><span asp-validation-for="FirstName"></span><br>
+        <label asp-for="LastName"></label><br>
+        <input asp-for="LastName"><span asp-validation-for="LastName"></span><br>
+        <label asp-for="Email"></label><br>
+        <input asp-for="Email"><span asp-validation-for="Email"></span><br>
+        <label asp-for="Password"></label><br>
+        <input asp-for="Password"><span asp-validation-for="Password"></span><br>
+        <label asp-for="PasswordConfirm"></label><br>
+        <input asp-for="PasswordConfirm"><span asp-validation-for="PasswordConfirm"></span><br>
+        <input type="submit" value="Register">
+    </div>
+    <div>
+        <label asp-for="Description"></label><br>
+        <input asp-for="Description"><span asp-validation-for="Description"></span><br>
+    </div>
+</form>
+<br>
+<a href="/login">Already have an account? Log in.</a>

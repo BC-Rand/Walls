@@ -12,6 +12,8 @@ namespace WallProj.Models
         [ForeignKey("User")]
         public int PosterUserId { get; set; }
         public User Poster { get; set; }
+        public int ParentCommentId { get; set; }
+        public Comment Parent { get; set; }
         public string Text { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }

@@ -1,0 +1,12 @@
+@model WallProj.Models.UserLogModel
+<h3>Log in</h3>
+
+<form action="/login/process" method="POST">
+    <label asp-for="Email"></label><br>
+    <input asp-for="Email"><span asp-validation-for="Email"></span><br>
+    <label asp-for="Password"></label><br>
+    <input asp-for="Password"><span asp-validation-for="Password"></span><br>
+    <input type="submit" value="Login">
+</form>
+<br>
+<a href="/register">No account? Register!</a>
