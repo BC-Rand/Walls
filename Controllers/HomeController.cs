@@ -157,7 +157,10 @@ namespace WallProj.Controllers
                 ViewBag.LoggedIn = false;
             }
 
-            return View();
+            List<User> AllUsers = _context.users.Where(user => user.UserId > 0).ToList();
+            ViewBag.AllUsers = AllUsers;
+            
+            return View(AllUsers);
         }
         [HttpGet]
         [Route("users/show/{UserId}")]
@@ -234,7 +237,7 @@ namespace WallProj.Controllers
         {
             return View();
         }
-
+        
 
 
 
