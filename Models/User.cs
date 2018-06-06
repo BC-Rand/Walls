@@ -8,7 +8,7 @@ namespace WallProj.Models
     public class User
     {
         [Key]
-        public int idUser { get; set; }
+        public int UserId { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -19,5 +19,10 @@ namespace WallProj.Models
         public DateTime CreatedAt { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
+        public List<Comment> Comments { get; set; }
+        public User()
+        {
+            Comments = new List<Comment>();
+        }
     }
 }

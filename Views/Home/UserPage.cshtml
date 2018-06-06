@@ -1,0 +1,17 @@
+@{
+    if (ViewBag.UserFound)
+    {
+        <h2>@ViewBag.UserFirstName @ViewBag.UserLastName</h2>
+        <p>Joined: @ViewBag.UserCreatedAt</p>
+        <p>Email: @ViewBag.UserEmail</p>
+        <p>Description: @ViewBag.UserDescription</p>
+        <br>
+        <h4>Leave a message for @ViewBag.UserFirstName</h4>
+        
+    }
+    else
+    {
+        <h3>Whoops</h3>
+        <p>There doesn't seem to be anything here.</p>
+    }
+}
