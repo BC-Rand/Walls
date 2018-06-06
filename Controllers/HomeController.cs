@@ -176,7 +176,7 @@ namespace WallProj.Controllers
             }
             else
             {
-                ViewBag.LoggedIn = false;
+                return RedirectToAction("Login");
             }
 
             ViewBag.UserFound = false;

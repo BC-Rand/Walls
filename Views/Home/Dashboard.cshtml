@@ -20,69 +20,80 @@
             }
         </tr>
     </thead>
-@{
-    foreach (var user in Model)
-    {
-        string Date = user.CreatedAt.ToString("MMMM dd, yyyy");
-        int Day = user.CreatedAt.Day;
-        string suffix;
-        
-        <!-- Strip leading 0 from days 1-9 -->
-        if (Day < 10)
+    <tbody>
+    @{
+        foreach (var user in Model)
         {
-            Date = Date.Remove(Date.Length-8,1);
-        }
+            string PermissionLevel = user.PermissionLevel == 9 ? "Admin" : "User";
+                
+            string Date = user.CreatedAt.ToString("MMMM dd, yyyy");
+            int Day = user.CreatedAt.Day;
+            string suffix;
+            
+            if (Day < 10)
+            {
+                Date = Date.Remove(Date.Length-8,1);
+            }
+            
+            switch(Day % 100)
+            {
+                case 11:
+                case 12:
+                case 13:
+                    suffix = "th";
+                    break;
+                default:
+                    switch(Day % 10)
+                    {
+                        case 1:
+                            suffix = "st";
+                            break;
+                        case 2:
+                            suffix = "nd";
+                            break;
+                        case 3:
+                            suffix = "rd";
+                            break;
+                        default:
+                            suffix = "th";
+                            break;
+                    }
+                    break;
+            }
         
-        <!--  -->
-        switch(Day % 100)
-        {
-            case 11:
-            case 12:
-            case 13:
-                suffix = "th";
-                break;
+            Date = Date.Substring(0, Date.Length-6) + suffix + Date.Substring(Date.Length-6, 6);
+            
+            
+                
+            if (ViewBag.LoggedIn && ViewBag.Permission == 9)
+            {   
+                <tr>
+                    <td><a href="/users/show/@user.UserId">@user.FirstName @user.LastName</a></td>
+                    <td>@user.Email</td>
+                    <td>@Date</td>
+                    <td>@PermissionLevel</td>
+                    <td><a href="/admin/edit/@user.UserId">Edit</a> remove</td>
+                </tr>
+            }
+            else if (ViewBag.LoggedIn)
+            {
+                <tr>
+                    <td><a href="/users/show/@user.UserId">@user.FirstName @user.LastName</a></td>
+                    <td>@user.Email</td>
+                    <td>@Date</td>
+                    <td>@PermissionLevel</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>@user.FirstName @user.LastName</td>
+                    <td>@Date</td>
+                    <td>@PermissionLevel</td>
+                </tr>
+            }
         }
-    
-        switch(Day % 10)
-        {
-            case 1:
-                suffix = "st";
-                break;
-            case 2:
-                suffix = "nd";
-                break;
-            case 3:
-                suffix = "rd";
-                break;
-            default:
-                suffix = "th";
-                break;
-        }
-        
+    }    
 
-        Date = Date.Substring(0, Date.Length-6) + suffix + Date.Substring(Date.Length-6, 6);
-        if (ViewBag.LoggedIn)
-        {
-            <td><a href="/users/show/@user.UserId">@user.FirstName @user.LastName</a></td>
-            <td>@user.Email</td>
-        }
-        else
-        {
-            <td>@user.FirstName @user.LastName</td>
-        }
-        <td>@Date</td>
-        if (user.PermissionLevel == 0)
-        {
-            <td>User</td>
-        }
-        else
-        {
-            <td>Admin</td>
-        }
-        if (ViewBag.LoggedIn && ViewBag.Permission == 9)
-        {
-            <td><a href="/admin/edit/@user.UserId">Edit</a> remove</td>
-        }
-    }
-}    
+    </tbody>
 </table>
