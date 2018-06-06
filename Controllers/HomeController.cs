@@ -54,7 +54,32 @@ namespace WallProj.Controllers
         [Route("login/process")]
         public IActionResult ProcessLogin(UserLogModel LoginAttempt)
         {
-            
+            if (ModelState.IsValid)
+            {
+                User EmailCheck = _context.users.SingleOrDefault(user => user.Email == LoginAttempt.Email);
+                if (EmailCheck == null)
+                {
+                    ModelState.AddModelError("Email", "Invalid login attempt");
+                }
+                else
+                {
+                    PasswordHasher<User> Hasher = new PasswordHasher<User>();
+                    
+                    if (0 != Hasher.VerifyHashedPassword(EmailCheck, EmailCheck.Password, LoginAttempt.Password))
+                    {
+                        HttpContext.Session.SetInt32("id", EmailCheck.idUser);
+                        HttpContext.Session.SetString("name", EmailCheck.FirstName+' '+EmailCheck.LastName);
+                        HttpContext.Session.SetInt32("permission", EmailCheck.PermissionLevel);
+                        return RedirectToAction("Dashboard");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Email", "Invalid login attempt");
+                    }
+                }
+            }
+
+            ViewBag.LoggedIn = false;
             return View("Login", LoginAttempt);
         }
         [HttpGet]
@@ -104,7 +129,16 @@ namespace WallProj.Controllers
                     ModelState.AddModelError("Email", "Please try another email address");
                 }
             }
+
+            ViewBag.LoggedIn = false;
             return View("Register", RegisterAttempt);
+        }
+        [HttpGet]
+        [Route("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index");
         }
         [HttpGet]
         [Route("dashboard")]
