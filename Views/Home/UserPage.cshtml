@@ -1,17 +1,123 @@
-@{
-    if (ViewBag.UserFound)
-    {
-        <h2>@ViewBag.UserFirstName @ViewBag.UserLastName</h2>
-        <p>Joined: @ViewBag.UserCreatedAt</p>
-        <p>Email: @ViewBag.UserEmail</p>
-        <p>Description: @ViewBag.UserDescription</p>
-        <br>
-        <h4>Leave a message for @ViewBag.UserFirstName</h4>
-        
-    }
-    else
-    {
-        <h3>Whoops</h3>
-        <p>There doesn't seem to be anything here.</p>
-    }
-}
+@model WallProj.Models.User
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <h2>@Model.FirstName @Model.LastName</h2>
+                @{
+                    if (@ViewBag.Id == Model.UserId)
+                    {
+                        
+                        <p><a href="/users/edit">Edit your profile</a></p>
+                        
+                    }
+                }
+            <p>Joined: @Model.CreatedAt</p>
+            <p>Email: @Model.Email</p>
+            <p>Description: @Model.Description</p>
+            
+        </div>
+        <div class="col-sm-6">
+            <h4>Leave a message for @Model.FirstName</h4>
+            <form action="/users/comment/process" id="CommentForm" method="POST">
+                <textarea class="form-control" style="display: inline;" name="Comment" id="Comment" rows="2"></textarea><br>
+                <input type="hidden" value="@Model.UserId" name="Recipient" id="Recipient">
+                <input type="submit" class="btn btn-primary" value="Post"><br>
+                <span id="CommentErrors" class="bg-danger"></span>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-6">
+            @{
+                foreach (var comment in Model.ReceivedComments)
+                {
+                    string Date = comment.CreatedAt.ToString("MMMM d, yyyy");
+                    string Time = comment.CreatedAt.ToString("h:mm tt");
+                    int Day = comment.CreatedAt.Day;
+                    string suffix;
+                    
+                    switch(Day % 100)
+                    {
+                        case 11:
+                        case 12:
+                        case 13:
+                            suffix = "th";
+                            break;
+                        default:
+                            switch(Day % 10)
+                            {
+                                case 1:
+                                    suffix = "st";
+                                    break;
+                                case 2:
+                                    suffix = "nd";
+                                    break;
+                                case 3:
+                                    suffix = "rd";
+                                    break;
+                                default:
+                                    suffix = "th";
+                                    break;
+                            }
+                            break;
+                    }
+                
+                    Date = Date.Substring(0, Date.Length-6) + suffix + Date.Substring(Date.Length-6, 6);
+                    
+                    <div>
+                        <h5><a href="/users/show/@comment.Commenter.UserId">@comment.Commenter.FirstName @comment.Commenter.LastName</a> commented on @Date at @Time:</h5>
+                        <p>@comment.Text</p>
+                    </div>
+                        
+                    foreach(var reply in comment.Replies)
+                    {
+                        string ReplyDate = reply.CreatedAt.ToString("MMMM d, yyyy");
+                        string ReplyTime = reply.CreatedAt.ToString("h:mm tt");
+                        int ReplyDay = reply.CreatedAt.Day;
+                        string ReplySuffix;
+                        
+                        switch(Day % 100)
+                        {
+                            case 11:
+                            case 12:
+                            case 13:
+                                ReplySuffix = "th";
+                                break;
+                            default:
+                                switch(ReplyDay % 10)
+                                {
+                                    case 1:
+                                        ReplySuffix = "st";
+                                        break;
+                                    case 2:
+                                        ReplySuffix = "nd";
+                                        break;
+                                    case 3:
+                                        ReplySuffix = "rd";
+                                        break;
+                                    default:
+                                        ReplySuffix = "th";
+                                        break;
+                                }
+                                break;
+                        }
+                        <div class="reply" style="padding-left:15px;">
+                            <h5><a href="/users/show/@reply.Poster.UserId">@reply.Poster.FirstName @reply.Poster.LastName</a> replied on @Date at @Time:</h5>
+                            <p>@reply.Text</p>
+                        </div>
+                    }
+                    <form action="/users/reply/process" class="ReplyForm" method="POST" style="padding-left:15px;">
+                        <textarea class="form-control" name="Reply" rows="3"></textarea><br>
+                        <input type="hidden" value="@comment.CommentId" name="Parent">
+                        <input type="hidden" value="@Model.UserId" name="Recipient">
+                        <input type="submit" class="btn btn-primary" value="Reply"><br>
+                        <span id="ReplyError@comment.CommentId" class="bg-danger"></span>
+                    </form>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+

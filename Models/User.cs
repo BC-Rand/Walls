@@ -9,8 +9,15 @@ namespace WallProj.Models
     {
         [Key]
         public int UserId { get; set; }
+        [EmailAddress]
         public string Email { get; set; }
+        [Required]
+        [MinLength(2)]
+        [MaxLength(30)]
         public string FirstName { get; set; }
+        [Required]
+        [MinLength(2)]
+        [MaxLength(30)]
         public string LastName { get; set; }
         public string Description { get; set; }
         public string Password { get; set; }
@@ -19,10 +26,14 @@ namespace WallProj.Models
         public DateTime CreatedAt { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
-        public List<Comment> Comments { get; set; }
+        [InverseProperty("Commenter")]
+        public List<Comment> PostedComments { get; set; }
+        [InverseProperty("Recipient")]
+        public List<Comment> ReceivedComments { get; set; }
         public User()
         {
-            Comments = new List<Comment>();
+            PostedComments = new List<Comment>();
+            ReceivedComments = new List<Comment>();
         }
     }
 }

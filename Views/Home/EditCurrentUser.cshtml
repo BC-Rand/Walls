@@ -1,0 +1,43 @@
+@model WallProj.Models.UserEditModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Edit your profile</h3>
+            <form action="/users/edit/process" method="POST">
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" name="Email" id="Email" value="@ViewBag.EditEmail"><span class="bg-danger" asp-validation-for="Email"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FirstName">First Name</label>
+                    <input asp-for="FirstName" class="form-control" name="FirstName" id="FirstName" value="@ViewBag.EditFirstName"><span class="bg-danger" asp-validation-for="FirstName"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName">Last Name</label>
+                    <input asp-for="LastName" class="form-control" name="LastName" id="LastName" value="@ViewBag.EditLastName"><span class="bg-danger" asp-validation-for="LastName"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description">Description</label>
+                    <textarea asp-for="Description" class="form-control" name="Description" id="Description" rows="3">@ViewBag.EditDescription</textarea><span class="bg-danger" asp-validation-for="Description"></span>
+                </div>
+                <input type="submit" class="btn btn-primary" value="Edit">
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <h3>Change your password</h3>
+            <form action="/users/edit/password" id="PasswordForm" method="POST">
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" name="Password" id="Password"><span id="PasswordErrors" class="bg-warning"></span>
+                </div>
+                <div class="form-group">
+                    <label for="PasswordConfirm">Confirm Password</label>
+                    <input type="password" class="form-control" name="PasswordConfirm" id="PasswordConfirm">
+                </div>
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+

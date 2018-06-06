@@ -12,11 +12,16 @@ namespace WallProj.Models
         [ForeignKey("User")]
         public int CommenterUserId { get; set; }
         public User Commenter { get; set; }
+        
+        [ForeignKey("User")]
+        public int RecipientUserId { get; set; }
+        public User Recipient { get; set; }
         public string Text { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedAt { get; set; }
+        [InverseProperty("Parent")]
         public List<Reply> Replies { get; set; }
         public Comment()
         {
